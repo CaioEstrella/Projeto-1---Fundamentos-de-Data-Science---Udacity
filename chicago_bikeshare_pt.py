@@ -44,10 +44,8 @@ input("Aperte Enter para continuar...")
 # TODO: Imprima o `gênero` das primeiras 20 linhas
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
 
-for line in range(1,21):
-    #print("linha " + str(line))
-    linha = data_list[line]
-    print(linha[-2])
+for line in data_list[:20]:
+    print(line[6])
 
 
 # Ótimo! Nós podemos pegar as linhas(samples) iterando com um for, e as colunas(features) por índices.
@@ -56,16 +54,15 @@ for line in range(1,21):
 input("Aperte Enter para continuar...")
 # TAREFA 3
 # TODO: Crie uma função para adicionar as colunas(features) de uma lista em outra lista, na mesma ordem
-'''
-    argumentos
-        data: o arquivo que foi lido
-        index: a coluna com que queremos trabalhar
-    retorna:
-        Uma lista com os valores da coluna escolhida no arquivo
 
-
-'''
 def column_to_list(data, index):
+    '''
+        argumentos
+            data: o arquivo que foi lido
+            index: a coluna com que queremos trabalhar
+        retorna:
+            Uma lista com os valores da coluna escolhida no arquivo
+    '''
     column_list = []
     # Dica: Você pode usar um for para iterar sobre as amostras, pegar a feature pelo seu índice, e dar append para uma lista
     for line in range(0, len(data)):
@@ -89,9 +86,15 @@ input("Aperte Enter para continuar...")
 # Agora sabemos como acessar as features, vamos contar quantos Male (Masculinos) e Female (Femininos) o dataset tem
 # TAREFA 4
 # TODO: Conte cada gênero. Você não deveria usar uma função para isso.
+lst = column_to_list(data_list, -2)
+male = 0
+female = 0
+for item in lst:
+    if item == 'Male':
+        male += 1
+    elif item == 'Female':
+        female += 1
 
-male = column_to_list(data_list, -2).count('Male')
-female = column_to_list(data_list, -2).count('Female')
 
 
 # Verificando o resultado
@@ -107,14 +110,15 @@ input("Aperte Enter para continuar...")
 # TAREFA 5
 # TODO: Crie uma função para contar os gêneros. Retorne uma lista.
 # Isso deveria retornar uma lista com [count_male, count_female] (exemplo: [10, 15] significa 10 Masculinos, 15 Femininos)
-'''
-    Argumentos:
-        lista: arquivo lido
-    Retorna:
-        uma lista de dois valores [total de male, total de female]
 
-'''
 def count_gender(lista):
+    '''
+        Argumentos:
+            lista: arquivo lido
+        Retorna:
+            uma lista de dois valores [total de male, total de female]
+
+    '''
     male = 0
     female = 0
     for line in lista:
@@ -140,23 +144,19 @@ input("Aperte Enter para continuar...")
 # TAREFA 6
 # TODO: Crie uma função que pegue o gênero mais popular, e retorne este gênero como uma string.
 # Esperamos ver "Male", "Female", ou "Equal" como resposta.
-'''
-    Argumentos
-        lista: Arquivo lido
-    Retorna:
-        Qual genero entre "male" e "female" é mais popular ou se são equivalentes ("Equal")
 
-'''
 
 def most_popular_gender(lista):
+    '''
+        Argumentos
+            lista: Arquivo lido
+        Retorna:
+            Qual genero entre "male" e "female" é mais popular ou se são equivalentes ("Equal")
+
+    '''
+
     answer = ""
-    male = 0
-    female = 0
-    for line in lista:
-        if line[-2] == "Male":
-            male += 1
-        if line[-2] == "Female":
-            female += 1
+    male, female = count_gender(lista)
     if male > female:
         answer = answer + "Male"
     elif female > male:
@@ -258,13 +258,14 @@ mean_trip = mean_trip / len(trip_duration_list)
 print('O TIPO DA trip_duration_list É: ', type(trip_duration_list))
 print('O TIPO Do elemento em trip_duration_list É: ', type(trip_duration_list[0]))
 
-'''
-Argumentos
-    lst: Lista com valores numéricos de uma das colunas do arquivo lido
-Retorna:
-    a mediana dos valores em formato str
-'''
+
 def median(lst):
+    '''
+    Argumentos
+        lst: Lista com valores numéricos de uma das colunas do arquivo lido
+    Retorna:
+        a mediana dos valores em formato str
+    '''
 
     n = len(lst)
     if n < 1:
@@ -328,23 +329,26 @@ input("Aperte Enter para continuar...")
 print("Você vai encarar o desafio? (yes ou no)")
 answer = "yes"
 
-lista_tipos = column_to_list(data_list, -3)
 
-def count_items(column_list):
+
+def count_items(lista):
     item_types = []
-    count_items = []
-    s = set(column_list)
-    for item in s:
-        item_types.append(item)
+    count_lst = []
+    s = set(lista)
+    item_types = list(set(lista))
 
-    count_items.append(int(len(column_list)))
+    count = 0
+    for i in lista:
+        if i in item_types:
+            count += 1
+    count_lst.append(count)
 
-    return item_types, count_items
+    return item_types, count_lst
 
 
 if answer == "yes":
     # ------------ NÃO MUDE NENHUM CÓDIGO AQUI ------------
-    column_list = column_to_list(data_list, -2)
+    column_list = column_to_list(data_list, -3)
     types, counts = count_items(column_list)
     print("\nTAREFA 12: Imprimindo resultados para count_items()")
     print("Tipos:", types, "Counts:", counts)
